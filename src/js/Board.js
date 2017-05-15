@@ -1,9 +1,28 @@
-function Board(size) {
-  this.currentColor = Board.BLACK;
-  this.size = size;
-  this.board = this.createBoard(size);
+function Board(size, currentColor, board) {
+  this.size = size || 15;
+  this.currentColor = currentColor || Board.BLACK;
+  if (!board) {
+    this.board = this.createBoard(size);
+  } else {
+    this.board = this.cloneBoard(board);
+  }
   this.allCombos = this.createCombo();
   this.win = false;
+  this.play = function play(i, j) {
+    if (this.board[i][j] !== Board.EMPTY || this.win === true) {
+      console.log('Play illegally.');
+      return false;
+    }
+    console.log(`Played at ${i}, ${j}.`);
+    this.board[i][j] = this.currentColor;
+    this.checkWin(i, j);
+    this.switchPlayer();
+    return true;
+  };
+  this.switchPlayer = function switchPlayer() {
+    this.currentColor =
+          this.currentColor === Board.BLACK ? Board.WHITE : Board.BLACK;
+  };
 }
 
 Board.EMPTY = 0;
@@ -25,13 +44,26 @@ Board.prototype.createBoard = function createBoard(size) {
   return m;
 };
 
+Board.prototype.cloneBoard = function cloneBoard(board) {
+  const m = [];
+  for (let i = 0; i < this.size; i += 1) {
+    m[i] = [];
+    for (let j = 0; j < this.size; j += 1) {
+      m[i][j] = board[i][j];
+    }
+  }
+  console.log('Clone new board.');
+  return m;
+};
+
+
 /*
  * Switches the current player
  */
-Board.prototype.switchPlayer = function switchPlayer() {
-  this.currentColor =
-        this.currentColor === Board.BLACK ? Board.WHITE : Board.BLACK;
-};
+// Board.prototype.switchPlayer = function switchPlayer() {
+//   this.currentColor =
+//         this.currentColor === Board.BLACK ? Board.WHITE : Board.BLACK;
+// };
 
 /*
  * Called when the game ends (both players passed)
@@ -43,16 +75,17 @@ Board.prototype.endGame = function endGame() {
 /*
  * Attempt to place a stone at (i,j). Returns true iff the move was legal
  */
-Board.prototype.play = function play(i, j) {
-  console.log(`Played at ${i}, ${j}.`);
-  if (this.board[i][j] !== Board.EMPTY) {
-    return false;
-  }
-  this.board[i][j] = this.currentColor;
-  this.checkWin(i, j);
-  this.switchPlayer();
-  return true;
-};
+// Board.prototype.play = function play(i, j) {
+//   if (this.board[i][j] !== Board.EMPTY || this.win === true) {
+//     console.log('Play illegally.');
+//     return false;
+//   }
+//   console.log(`Played at ${i}, ${j}.`);
+//   this.board[i][j] = this.currentColor;
+//   this.checkWin(i, j);
+//   this.switchPlayer();
+//   return true;
+// };
 
 
 Board.prototype.createCombo = function createCombo() {
