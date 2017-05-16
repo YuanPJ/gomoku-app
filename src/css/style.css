@@ -17,12 +17,16 @@ li {
 }
 
 .gomoku-game {
-  display: flex;
-  flex-direction: row;
+    display: flex;
+    flex-wrap: wrap;
+    /*flex-direction: row;*/
+}
+
+.chess {
 }
 
 .history-list {
-    height: 600px;
+    height: 530px;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;

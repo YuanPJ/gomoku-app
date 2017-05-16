@@ -1,4 +1,4 @@
-function Board(size, currentColor, board) {
+function Board(size, currentColor, board, win) {
   this.size = size || 15;
   this.currentColor = currentColor || Board.BLACK;
   if (!board) {
@@ -6,8 +6,7 @@ function Board(size, currentColor, board) {
   } else {
     this.board = this.cloneBoard(board);
   }
-  this.allCombos = this.createCombo();
-  this.win = false;
+  this.win = win || false;
   this.play = function play(i, j) {
     if (this.board[i][j] !== Board.EMPTY || this.win === true) {
       console.log('Play illegally.');
@@ -148,6 +147,8 @@ Board.prototype.createCombo = function createCombo() {
   return allCombos;
 };
 
+Board.allCombos = Board.prototype.createCombo();
+
 Board.prototype.valueCombo = function valueCombo(w, u2, u3, u4, c3, c4) {
   if (w > 0) return 1000000000;
   if (u4 > 0) return 100000000;
@@ -242,17 +243,17 @@ Board.prototype.valuePosition = function valuePosition(arr1, arr2, arr3, arr4) {
   let c4 = 0;
   const allArr = [arr1, arr2, arr3, arr4];
   for (let i = 0; i < allArr.length; i += 1) {
-    if (this.isAnyInArrays(this.allCombos[0], allArr[i])) {
+    if (this.isAnyInArrays(Board.allCombos[0], allArr[i])) {
       w += 1;
-    } else if (this.isAnyInArrays(this.allCombos[4], allArr[i])) {
+    } else if (this.isAnyInArrays(Board.allCombos[4], allArr[i])) {
       c4 += 1;
-    } else if (this.isAnyInArrays(this.allCombos[5], allArr[i])) {
+    } else if (this.isAnyInArrays(Board.allCombos[5], allArr[i])) {
       c3 += 1;
-    } else if (this.isAnyInArrays(this.allCombos[1], allArr[i])) {
+    } else if (this.isAnyInArrays(Board.allCombos[1], allArr[i])) {
       u4 += 1;
-    } else if (this.isAnyInArrays(this.allCombos[2], allArr[i])) {
+    } else if (this.isAnyInArrays(Board.allCombos[2], allArr[i])) {
       u3 += 1;
-    } else if (this.isAnyInArrays(this.allCombos[3], allArr[i])) {
+    } else if (this.isAnyInArrays(Board.allCombos[3], allArr[i])) {
       u2 += 1;
     }
   }
